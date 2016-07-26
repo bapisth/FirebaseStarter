@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "522479141684",
+    "firebase_url": "https://myfirebasesatarter.firebaseio.com",
+    "project_id": "myfirebasesatarter",
+    "storage_bucket": "myfirebasesatarter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522479141684:android:62ba27cce3be1b62",
+        "android_client_info": {
+          "package_name": "com.urja.hemendra.firebasestarter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522479141684-9ji4ocjc8mi2mgmn2155sl44lds8b3gd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZL5rF3IQDvBQBNjgcYzWj3-6sLTkjM98"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
