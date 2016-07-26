@@ -15,16 +15,26 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.urja.hemendra.firebasestarter.models.Person;
+import com.urja.hemendra.firebasestarter.models.PersonAddress;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button btnChangeEmail, btnChangePassword, btnSendResetEmail, btnRemoveUser,
-            changeEmail, changePassword, sendEmail, remove, signOut;
+            changeEmail, changePassword, sendEmail, remove, signOut, updateUser;
 
-    private EditText oldEmail, newEmail, password, newPassword;
+    private EditText oldEmail, newEmail, password, newPassword, person_name,
+            personAddressCity, personAddressState, personAddressCountry;
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
+    private DatabaseReference mdatabaseRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference personChildRef = mdatabaseRootRef.child("person");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        // Get UI Elements
         btnChangeEmail = (Button) findViewById(R.id.change_email_button);
         btnChangePassword = (Button) findViewById(R.id.change_password_button);
         btnSendResetEmail = (Button) findViewById(R.id.sending_pass_reset_button);
@@ -63,11 +74,18 @@ public class MainActivity extends AppCompatActivity {
         sendEmail = (Button) findViewById(R.id.send);
         remove = (Button) findViewById(R.id.remove);
         signOut = (Button) findViewById(R.id.sign_out);
+        updateUser = (Button) findViewById(R.id.update_user);
 
         oldEmail = (EditText) findViewById(R.id.old_email);
         newEmail = (EditText) findViewById(R.id.new_email);
         password = (EditText) findViewById(R.id.password);
         newPassword = (EditText) findViewById(R.id.newPassword);
+
+        person_name = (EditText) findViewById(R.id.person_name);
+        personAddressCity = (EditText) findViewById(R.id.personaddress_city);
+        personAddressState = (EditText) findViewById(R.id.personaddress_state);
+        personAddressCountry = (EditText) findViewById(R.id.personaddress_country);
+
 
         oldEmail.setVisibility(View.GONE);
         newEmail.setVisibility(View.GONE);
@@ -239,6 +257,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        updateUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUser();
+            }
+        });
+
+    }
+
+    private void updateUser() {
+        String personName = person_name.getText().toString();
+        String personCity = personAddressCity.getText().toString();
+        String personState = personAddressState.getText().toString();
+        String personCountry = personAddressCountry.getText().toString();
+
+        personChildRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //String value = dataSnapshot.getValue(String.class);
+                Person person = dataSnapshot.getValue(Person.class);
+                Toast.makeText(MainActivity.this, "Value is coming:"+ person.getName(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        Person p = new Person();
+        p.setName(personName);
+        PersonAddress personAddress = new PersonAddress();
+        personAddress.setCity(personCity);
+        personAddress.setState(personState);
+        personAddress.setCountry(personCountry);
+        p.setPersonAddress(personAddress);
+
+        personChildRef.child(auth.getCurrentUser().getUid()).push().setValue(p);
+        //personChildRef.child(auth.getCurrentUser().getUid()).child("person").setValue(p);
     }
 
     //sign out method
