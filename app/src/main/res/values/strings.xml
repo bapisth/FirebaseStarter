@@ -33,4 +33,6 @@
     <string name="btn_update_user">Update Address</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="menu_profile">Profile</string>
+    <string name="title_activity_my_profile">MyProfile</string>
 </resources>

@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.urja.hemendra.firebasestarter.models.Person;
 import com.urja.hemendra.firebasestarter.models.PersonAddress;
 
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private DatabaseReference mdatabaseRootRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference personChildRef = mdatabaseRootRef.child("person");
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+        new DrawerBuilder(this).build();
 
         // Get UI Elements
         btnChangeEmail = (Button) findViewById(R.id.change_email_button);
@@ -295,6 +302,28 @@ public class MainActivity extends AppCompatActivity {
 
         personChildRef.child(auth.getCurrentUser().getUid()).push().setValue(p);
         //personChildRef.child(auth.getCurrentUser().getUid()).child("person").setValue(p);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        Log.e(TAG, "onOptionsItemSelected: "+ id + "="+ R.id.action_profile );
+        if (id == R.id.action_profile) {
+            Log.e(TAG, "onOptionsItemSelected: "+id );
+            //Open New Window
+            Intent intent = new Intent(MainActivity.this, MyProfile.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //sign out method
